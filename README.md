@@ -1,5 +1,14 @@
 # go-calculate-for-me
-Running communicating gRPC based microservices in Kubernetes
+Running interdependent gRPC based microservices in Kubernetes
+
+- Golang
+- microservices
+- protocol buffers
+- gRpc
+- gorilla
+- Docker
+- Kubernetes
+- Makefile
 
 ## Protocol buffers
 Autogenerate grpc code by running the following commands in the root derectory:
