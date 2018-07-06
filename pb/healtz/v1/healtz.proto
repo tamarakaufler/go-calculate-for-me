@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package pb.healtz.v1;
+
+message HealtzRequest {
+  string service = 1;
+}
+
+message HealtzResponse {
+  enum Status {
+    UNKNOWN = 0;
+    HEALTHY = 1;
+    NOT_HEALTHY = 2;
+    NOT_FOUND = 3;
+  }
+  Status status = 1;
+}
+
+service HealtzService {
+  rpc HealtzCheck(HealtzRequest) returns (HealtzResponse);
+}

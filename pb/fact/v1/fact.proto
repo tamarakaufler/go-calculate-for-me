@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package pb.fact.v1;
+
+message FactRequest {
+  uint64 a = 1;
+}
+
+message FactResponse {
+  uint64 result = 1;
+}
+
+service FactService {
+  rpc Compute (FactRequest) returns (FactResponse) {}
+}
