@@ -66,11 +66,10 @@ func factorial(a uint64) uint64 {
 	if ok {
 		log.Printf("\tfact-service: factorial function: cache[%d]=%d\n", a-1, b)
 		a = a * b
-		log.Printf("\tfact-service: factorial function: caching fact for %d (%d)\n", key, a)
 	} else {
 		a = a * factorial(a-1)
-		log.Printf("\tfact-service: factorial function: caching fact for %d (%d)\n", key, a)
 	}
+	log.Printf("\tfact-service: factorial function: caching fact for %d (%d)\n", key, a)
 	cache[key] = a
 
 	return a
