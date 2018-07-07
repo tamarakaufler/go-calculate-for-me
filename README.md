@@ -56,6 +56,7 @@ Then access the FE service on:
   minikube service fe-service --url
 
 eg,
+
     http://192.168.99.100:31298/ping
     
     http://192.168.99.100:31298/fact/6
