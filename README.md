@@ -37,3 +37,24 @@ Autogenerate grpc code by running the following commands in the root derectory:
 	protoc -I/usr/local/include -I. --go_out=plugins=grpc:$GOPATH/src/github.com/tamarakaufler/go-calculate-for-me pb/ping/v1/ping.proto
 
   ## Deployment
+
+  ### Locally using Docker containers
+
+  GCD, factorial and FE services must all listen on different ports. One possible setup:
+
+    GCD_PORT=4000 FACT_PORT=5000 FE_PORT=5000 FE_PORT=8888 make run-fe-service
+
+  where the FE service is running on port 3000 in the container but is exposed on port 8888 on the host. GCD and Factorial services run and are exposed on port 4000 and 5000 respectively.
+
+  ### In Kubernetes
+
+kubectl apply -f deployment/
+
+Then access the FE service on:
+
+  minikube service fe-service --url
+
+eg,
+    http://192.168.99.100:31298/ping
+    http://192.168.99.100:31298/fact/6
+    http://192.168.99.100:31298/gcd/363/654
