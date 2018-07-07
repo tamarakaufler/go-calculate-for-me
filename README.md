@@ -2,7 +2,7 @@
 Running interdependent gRPC based microservices in Kubernetes
 
 Application consists of several microservices, bulk of which implement and provide a result of a particular calculation, and one acting as an access point/api to the calculation services:
-
+```
                  fe-service
   (REST api to gRPC calculation microservices)
                       |
@@ -15,6 +15,7 @@ Application consists of several microservices, bulk of which implement and provi
                             |
                       fact-service
                        (Factorial)
+```
 
 - Golang
 - microservices
@@ -56,5 +57,7 @@ Then access the FE service on:
 
 eg,
     http://192.168.99.100:31298/ping
+    
     http://192.168.99.100:31298/fact/6
+    
     http://192.168.99.100:31298/gcd/363/654
