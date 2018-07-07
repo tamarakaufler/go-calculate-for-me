@@ -24,7 +24,8 @@ func init() {
 func main() {
 	flag.Parse()
 
-	conn, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
+	host := fmt.Sprintf(":%d", port)
+	conn, err := net.Listen("tcp", host)
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
@@ -34,7 +35,7 @@ func main() {
 	pingProto.RegisterPingServiceServer(s, &server{})
 	reflection.Register(s)
 
-	log.Println("Starting Greatest common denominator Service server")
+	log.Printf("Starting Greatest common denominator Service server %s\n", host)
 	if err := s.Serve(conn); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
 	}

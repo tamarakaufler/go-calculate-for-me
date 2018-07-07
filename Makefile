@@ -31,6 +31,7 @@ run-gcd-service:
 	--name=gcd-service \
 	--network=calc-net-bridge \
 	--rm \
+	-d \
 	-p $(GCD_PORT):$(GCD_PORT) \
 	quay.io/tamarakaufler/gcd-service:$(GCD_IMAGE_TAG) \
 	-port=$(GCD_PORT)
@@ -50,6 +51,7 @@ run-fact-service:
 	--name=fact-service \
 	--network=calc-net-bridge \
 	--rm \
+	-d \
 	-p $(FACT_PORT):$(FACT_PORT) \
 	quay.io/tamarakaufler/factorial-service:$(FACT_IMAGE_TAG) \
 	-port=$(FACT_PORT)
@@ -69,8 +71,9 @@ run-fe-service:
 	--name=fe-service \
 	--network=calc-net-bridge \
 	--rm \
-	-p $(FE_PORT):$(FE_PORT) \
-	quay.io/tamarakaufler/fe-calculations:$(FE_IMAGE_TAG)
+	-p $(FE_PORT):3000 \
+	quay.io/tamarakaufler/fe-calculations:$(FE_IMAGE_TAG) \
+	--gcd-port=$(GCD_PORT) --fact-port=$(FACT_PORT)
 
 
 dev-all-services:  protoc
@@ -84,5 +87,4 @@ dev-all: dev-all-services
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o fe-service/fe-service -a -installsuffix cgo fe-service/main.go
 	docker build -f fe-service/Dockerfile -t quay.io/tamarakaufler/fe-calculations:$(FE_IMAGE_TAG) .
 
-
-
+run-all: run-gcd-service run-fact-service run-fe-service
