@@ -3,10 +3,10 @@ Running interdependent gRPC based microservices in Kubernetes
 
 Application consists of several microservices, bulk of which implement and provide a result of a particular calculation, and one acting as an access point/api to the calculation services:
 ```
-                 fe-service
-  (REST api to gRPC calculation microservices)
-                      |
-                      |
+                         fe-service
+          (REST api to gRPC calculation microservices)
+                              |
+                              |
                 -------------------------------
                 |               |             |
                 |               |             |
