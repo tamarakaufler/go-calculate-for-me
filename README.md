@@ -8,13 +8,13 @@ Application consists of several microservices, bulk of which implement and provi
                       |
                       |
                 -------------------------------
-                |           |                 |
-                |           |                 |
-                |           |                 |
-                |           |                 |
-          gcd-service       |           fib-service
-  (Greatest common denominator)         (Fibonacci)
-                            |
+                |               |             |
+                |               |             |
+                |               |             |
+                |               |             |
+          gcd-service           |       fib-service
+  (Greatest common denominator) |       (Fibonacci)
+                                |
                       fact-service
                        (Factorial)
 ```
@@ -66,6 +66,8 @@ Then access the FE service on:
 eg,
 
     http://192.168.99.100:31298/ping
+    
+    http://192.168.99.100:31298/fib/10
     
     http://192.168.99.100:31298/fact/6
     
