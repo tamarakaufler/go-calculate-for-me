@@ -51,6 +51,8 @@ b) make protoc
 
   GCD, factorial, fibonacci and FE services must all listen on different ports. One possible setup:
 
+    make dev-all
+    
     GCD_PORT=4000 FACT_PORT=5000 FIB_PORT=6000 FE_PORT=8888 make run-all
 
   where the FE service is running on default port 3000 in the container but is exposed on port 8888 on the host. GCD, Factorial and Fibonacci services run and are exposed on port 4000, 5000 and 6000 respectively.
