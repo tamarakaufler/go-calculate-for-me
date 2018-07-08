@@ -37,7 +37,7 @@ a) Manually
   
 	protoc -I/usr/local/include -I. --go_out=plugins=grpc:$GOPATH/src/github.com/tamarakaufler/go-calculate-for-me pb/fact/v1/fact.proto
 
-  protoc -I/usr/local/include -I. --go_out=plugins=grpc:$GOPATH/src/github.com/tamarakaufler/go-calculate-for-me pb/fib/v1/fib.proto
+  	protoc -I/usr/local/include -I. --go_out=plugins=grpc:$GOPATH/src/github.com/tamarakaufler/go-calculate-for-me pb/fib/v1/fib.proto
 
 	protoc -I/usr/local/include -I. --go_out=plugins=grpc:$GOPATH/src/github.com/tamarakaufler/go-calculate-for-me pb/healtz/v1/healtz.proto
 
@@ -51,9 +51,9 @@ b) make protoc
 
   GCD, factorial, fibonacci and FE services must all listen on different ports. One possible setup:
 
-    GCD_PORT=4000 FACT_PORT=5000 FE_PORT=5000 FE_PORT=8888 make run-fe-service
+    GCD_PORT=4000 FACT_PORT=5000 FIB_PORT=6000 FE_PORT=8888 make run-fe-service
 
-  where the FE service is running on port 3000 in the container but is exposed on port 8888 on the host. GCD, Factorial and Fibonacci services run and are exposed on port 4000, 5000 and 6000 respectively.
+  where the FE service is running on default port 3000 in the container but is exposed on port 8888 on the host. GCD, Factorial and Fibonacci services run and are exposed on port 4000, 5000 and 6000 respectively.
 
   ### In Kubernetes
 
