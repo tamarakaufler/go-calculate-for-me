@@ -1,7 +1,7 @@
 # go-calculate-for-me
 Running interdependent gRPC based microservices in Kubernetes
 
-Application consists of several microservices, bulk of which implement and provide a result of a particular calculation, and one acting as an access point/api to the calculation services:
+Application consists of an API service (fe-service) and a collection of microservices, implementing a particular calculation:
 ```
                          fe-service
           (REST api to gRPC calculation microservices)
@@ -18,7 +18,7 @@ Application consists of several microservices, bulk of which implement and provi
                       fact-service
                        (Factorial)
 ```
-
+#### Technology stack and tools
 - Golang
 - microservices
 - protocol buffers
@@ -27,6 +27,10 @@ Application consists of several microservices, bulk of which implement and provi
 - Docker
 - Kubernetes
 - Makefile
+
+All code is stored and organised within a monorepo. Each service lives in its own directory. All protobuf descriptions share one directory (pb).The frontend to the calculation services (fe-service) has (gorilla) handlers and (gRPC) clients stored in their respective subdirectories (handler, client). Kubernetes deployment yamls are housed together in the deployment dir.
+
+Makefile is used for ease of development and running.
 
 ## Protocol buffers
 Autogenerate grpc code by running the following commands in the root derectory:
@@ -37,7 +41,7 @@ a) Manually
   
 	protoc -I/usr/local/include -I. --go_out=plugins=grpc:$GOPATH/src/github.com/tamarakaufler/go-calculate-for-me pb/fact/v1/fact.proto
 
-  	protoc -I/usr/local/include -I. --go_out=plugins=grpc:$GOPATH/src/github.com/tamarakaufler/go-calculate-for-me pb/fib/v1/fib.proto
+  protoc -I/usr/local/include -I. --go_out=plugins=grpc:$GOPATH/src/github.com/tamarakaufler/go-calculate-for-me pb/fib/v1/fib.proto
 
 	protoc -I/usr/local/include -I. --go_out=plugins=grpc:$GOPATH/src/github.com/tamarakaufler/go-calculate-for-me pb/healtz/v1/healtz.proto
 
