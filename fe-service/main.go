@@ -14,13 +14,14 @@ import (
 )
 
 var (
-	port, gcdPort, factPort int
+	port, gcdPort, factPort, fibPort int
 )
 
 func init() {
 	flag.IntVar(&port, "port", 3000, "FE port")
 	flag.IntVar(&gcdPort, "gcd-port", 3000, "GCD service port")
 	flag.IntVar(&factPort, "fact-port", 3000, "Factorial service port")
+	flag.IntVar(&fibPort, "fib-port", 3000, "Fibonacci service port")
 }
 
 func main() {
@@ -43,12 +44,22 @@ func main() {
 	}
 	factHandler := handler.FactHandler(factConf)
 
+	fibConf := client.Config{
+		Service: "fib-service",
+		Port:    fibPort,
+		Options: []grpc.DialOption{grpc.WithInsecure()},
+	}
+	fibHandler := handler.FibHandler(fibConf)
+
 	r.HandleFunc("/gcd/{a}/{b}", gcdHandler).
 		Methods("GET").
 		Name("gcd-compute")
 	r.HandleFunc("/fact/{a}", factHandler).
 		Methods("GET").
 		Name("fact-compute")
+	r.HandleFunc("/fib/{a}", fibHandler).
+		Methods("GET").
+		Name("fib-compute")
 	r.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Header().Set("Content-Type", "application/json")

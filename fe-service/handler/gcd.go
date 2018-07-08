@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -14,6 +15,8 @@ import (
 func GCDHandler(conf client.Config) http.HandlerFunc {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("Request for greatest common denominator calculation [%s]", r.RequestURI)
+
 		w.Header().Set("Content-Type", "application/json")
 
 		// Process input -------------------------------
