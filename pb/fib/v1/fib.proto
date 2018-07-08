@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package pb.fib.v1;
+
+message FibRequest {
+  uint64 a = 1;
+}
+
+message FibResponse {
+  uint64 result = 1;
+}
+
+service FibService {
+  rpc Compute (FibRequest) returns (FibResponse) {}
+}

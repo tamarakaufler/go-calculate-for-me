@@ -7,11 +7,13 @@ Application consists of several microservices, bulk of which implement and provi
   (REST api to gRPC calculation microservices)
                       |
                       |
-                -------------
-                |           |
-                |           |
-          gcd-service       |
-  (Greatest common denominator)
+                -------------------------------
+                |           |                 |
+                |           |                 |
+                |           |                 |
+                |           |                 |
+          gcd-service       |           fib-service
+  (Greatest common denominator)         (Fibonacci)
                             |
                       fact-service
                        (Factorial)
@@ -47,11 +49,11 @@ b) make protoc
 
   ### Locally using Docker containers
 
-  GCD, factorial and FE services must all listen on different ports. One possible setup:
+  GCD, factorial, fibonacci and FE services must all listen on different ports. One possible setup:
 
     GCD_PORT=4000 FACT_PORT=5000 FE_PORT=5000 FE_PORT=8888 make run-fe-service
 
-  where the FE service is running on port 3000 in the container but is exposed on port 8888 on the host. GCD and Factorial services run and are exposed on port 4000 and 5000 respectively.
+  where the FE service is running on port 3000 in the container but is exposed on port 8888 on the host. GCD, Factorial and Fibonacci services run and are exposed on port 4000, 5000 and 6000 respectively.
 
   ### In Kubernetes
 
