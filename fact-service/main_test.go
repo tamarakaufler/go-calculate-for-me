@@ -27,7 +27,7 @@ func Test_factorial(t *testing.T) {
 			want: 6,
 		},
 		{
-			name: "ten",
+			name: "seven",
 			args: args{7},
 			want: 5040,
 		},
