@@ -1,8 +1,7 @@
 # Instrumentation
 
-The application, a set of microservices, is running in Kubernetes.
 Prometheus monitoring and alerting system is used to provide useful insight into the
-performance and possible issues.
+performance and possible issues of the fe service API.
 
 ## Prometheus installation
 
@@ -31,3 +30,10 @@ kubectl port-forward -n monitoring prometheus-kube-prometheus-0 9090
 
 ### Grafana dashboard
 kubectl port-forward $(kubectl get  pods --selector=app=kube-prometheus-grafana -n  monitoring --output=jsonpath="{.items..metadata.name}") -n monitoring  3000
+
+## Reading
+https://github.com/zbindenren/negroni-prometheus/blob/master/middleware.go
+https://itnext.io/kubernetes-monitoring-with-prometheus-in-15-minutes-8e54d1de2e13
+https://alex.dzyoba.com/blog/go-prometheus-service/
+https://github.com/prometheus/prometheus/issues/4052
+http://www.ru-rocker.com/2017/04/02/micro-services-using-go-kit-monitoring-services

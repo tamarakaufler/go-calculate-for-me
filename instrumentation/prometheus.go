@@ -17,8 +17,8 @@ const (
 )
 
 type Middler struct {
-	reqs    *prometheus.CounterVec
-	latency *prometheus.HistogramVec
+	requests *prometheus.CounterVec
+	latency  *prometheus.HistogramVec
 }
 
 // NewInstrMiddler creates new instrumentation middleware.
@@ -28,7 +28,7 @@ type Middler struct {
 func NewInstrMiddler(name string, buckets ...float64) *Middler {
 	var m Middler
 
-	m.reqs = prometheus.NewCounterVec(
+	m.requests = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
 			Name:        reqsName,
 			Help:        "How many HTTP requests processed, partitioned by status code, method and HTTP path.",
@@ -36,7 +36,7 @@ func NewInstrMiddler(name string, buckets ...float64) *Middler {
 		},
 		[]string{"code", "method", "path"},
 	)
-	prometheus.MustRegister(m.reqs)
+	prometheus.MustRegister(m.requests)
 
 	if len(buckets) == 0 {
 		buckets = defBuckets
@@ -65,7 +65,7 @@ func (m *Middler) Instrument(next http.Handler) http.Handler {
 			status = http.StatusText(200)
 		}
 
-		m.reqs.WithLabelValues(status, r.Method, r.URL.Path).Inc()
+		m.requests.WithLabelValues(status, r.Method, r.URL.Path).Inc()
 		m.latency.WithLabelValues(status, r.Method, r.URL.Path).Observe(float64(time.Since(start).Nanoseconds()) / 1000000)
 	})
 }

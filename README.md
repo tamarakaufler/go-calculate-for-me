@@ -82,11 +82,17 @@ eg,
 
 ## Monitoring
 
-### Prometheus
+The fe service is instrumented for monitoring with Prometheus. The scraping
+path is the default /metrics. Intrumentation middleware provides two custom
+metrics:
+  - requests_total
+  - request_duration_milliseconds
 
-### Apache Bench
+### Load testing with Apache Bench
+The application can be load tested using the Apache bench.
 
-#### Need to have Apache Bench installed. On Ubuntu:
+#### Apache Bench installation
+On Ubuntu:
 
   sudo apt-get install apache2-utils
 
