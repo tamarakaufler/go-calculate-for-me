@@ -12,8 +12,8 @@ var (
 )
 
 const (
-	reqsName    = "requests_total"
-	latencyName = "request_duration_milliseconds"
+	requestsName = "requests_total"
+	latencyName  = "request_duration_milliseconds"
 )
 
 type Middler struct {
@@ -30,7 +30,7 @@ func NewInstrMiddler(name string, buckets ...float64) *Middler {
 
 	m.requests = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
-			Name:        reqsName,
+			Name:        requestsName,
 			Help:        "How many HTTP requests processed, partitioned by status code, method and HTTP path.",
 			ConstLabels: prometheus.Labels{"service": name},
 		},
