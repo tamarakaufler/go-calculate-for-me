@@ -39,10 +39,11 @@ func FibHandler(conf client.Config) http.HandlerFunc {
 		fibReq := &fibProto.FibRequest{A: a}
 		if fibRes, err := fibClient.Compute(r.Context(), fibReq); err == nil {
 			w.WriteHeader(http.StatusOK)
+
 			io.WriteString(w, fmt.Sprintf(`{"result": "%d"}`, fibRes.GetResult()))
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Header().Set("error", "bad [a] value")
+			w.Header().Set("error", http.StatusText(http.StatusInternalServerError))
 		}
 	})
 }

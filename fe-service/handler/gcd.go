@@ -26,14 +26,14 @@ func GCDHandler(conf client.Config) http.HandlerFunc {
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			w.Header().Set("content", "")
-			w.Header().Set("error", "bad [a] value")
+			w.Header().Set("error", "bad request ([a] value)")
 			return
 		}
 		bStr := vars["b"]
 		b, err := strconv.ParseUint(bStr, 10, 64)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
-			w.Header().Set("error", "bad [b] value")
+			w.Header().Set("error", "bad request ([b] value)")
 			return
 		}
 
@@ -41,16 +41,18 @@ func GCDHandler(conf client.Config) http.HandlerFunc {
 		gcdClient, err := client.GCDService(conf)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
+			w.Header().Set("error", http.StatusText(http.StatusInternalServerError))
 			return
 		}
 
 		pbReq := &gcdProto.GCDRequest{A: a, B: b}
 		if pbRes, err := gcdClient.Compute(r.Context(), pbReq); err == nil {
 			w.WriteHeader(http.StatusOK)
+
 			io.WriteString(w, fmt.Sprintf(`{"result": "%d"}`, pbRes.GetResult()))
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Header().Set("error", "bad [b] value")
+			w.Header().Set("error", http.StatusText(http.StatusInternalServerError))
 		}
 	})
 }

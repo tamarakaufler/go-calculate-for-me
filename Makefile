@@ -12,6 +12,9 @@ QUAY_PASS?=biggestsecret
 net:
 	docker network create --driver bridge calc-net-bridge
 
+k8s:
+	kubectl apply -f deployment/ -f deployment/prometheus/
+
 protoc:
 	protoc -I/usr/local/include -I. --go_out=plugins=grpc:$(GOPATH)/src/github.com/tamarakaufler/go-calculate-for-me pb/gcd/v1/gcd.proto
 	protoc -I/usr/local/include -I. --go_out=plugins=grpc:$(GOPATH)/src/github.com/tamarakaufler/go-calculate-for-me pb/fact/v1/fact.proto
@@ -114,4 +117,6 @@ dev-all: dev-all-services
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o fe-service/fe-service -a -installsuffix cgo fe-service/main.go
 	docker build -f fe-service/Dockerfile -t quay.io/tamarakaufler/fe-calculations:$(FE_IMAGE_TAG) .
 
-run-all: run-gcd-service run-fact-service run-fib-service run-fe-service
+run-all-docker: run-gcd-service run-fact-service run-fib-service run-fe-service
+
+run-all-k8s: dev-all k8s

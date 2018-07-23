@@ -26,7 +26,7 @@ func FactHandler(conf client.Config) http.HandlerFunc {
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			w.Header().Set("content", "")
-			w.Header().Set("error", "bad [a] value")
+			w.Header().Set("error", "bad request ([a] value)")
 			return
 		}
 
@@ -34,16 +34,18 @@ func FactHandler(conf client.Config) http.HandlerFunc {
 		factClient, err := client.FactService(conf)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
+			w.Header().Set("error", http.StatusText(http.StatusInternalServerError))
 			return
 		}
 
 		factReq := &factProto.FactRequest{A: a}
 		if factRes, err := factClient.Compute(r.Context(), factReq); err == nil {
 			w.WriteHeader(http.StatusOK)
+
 			io.WriteString(w, fmt.Sprintf(`{"result": "%d"}`, factRes.GetResult()))
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Header().Set("error", "bad [a] value")
+			w.Header().Set("error", http.StatusText(http.StatusInternalServerError))
 		}
 	})
 }

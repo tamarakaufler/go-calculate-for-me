@@ -71,10 +71,37 @@ Then access the FE service on:
 
 eg,
 
-    http://192.168.99.100:31298/ping
+    http://192.168.99.100:30831/ping
     
-    http://192.168.99.100:31298/fib/10
+    http://192.168.99.100:30831/fib/10
     
-    http://192.168.99.100:31298/fact/6
+    http://192.168.99.100:30831/fact/6
     
-    http://192.168.99.100:31298/gcd/363/654
+    http://192.168.99.100:30831/gcd/363/654
+
+
+## Monitoring
+
+### Prometheus
+
+### Apache Bench
+
+#### Need to have Apache Bench installed. On Ubuntu:
+
+  sudo apt-get install apache2-utils
+
+#### Create some traffic :)
+
+Running against FE service running in Kubernetes cluster. Your IP and port may differ.
+
+ab -t 10 -n 10 http://192.168.99.100:30831/fib/5
+ab -t 10 -n 20 http://192.168.99.100:30831/fib/10
+ab -t 10 -n 30 http://192.168.99.100:30831/fib/100
+ab -t 10 -n 50 http://192.168.99.100:30831/fact/5
+ab -t 10 -n 60 http://192.168.99.100:30831/fact/10
+ab -t 10 -n 70 http://192.168.99.100:30831/fact/100
+ab -t 10 -n 100 http://192.168.99.100:30831/gcd/55/555
+
+The above commands can be issued by running:
+
+./load/ab_load.sh

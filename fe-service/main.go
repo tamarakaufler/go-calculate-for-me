@@ -10,7 +10,10 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/tamarakaufler/go-calculate-for-me/fe-service/client"
 	"github.com/tamarakaufler/go-calculate-for-me/fe-service/handler"
+	"github.com/tamarakaufler/go-calculate-for-me/instrumentation"
 	"google.golang.org/grpc"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 var (
@@ -28,7 +31,7 @@ func main() {
 	flag.Parse()
 	r := mux.NewRouter()
 
-	fmt.Printf("Starting FE service on port %d\n", port)
+	promMiddler := instrumentation.NewInstrMiddler("fe")
 
 	gcdConf := client.Config{
 		Service: "gcd-service",
@@ -51,15 +54,16 @@ func main() {
 	}
 	fibHandler := handler.FibHandler(fibConf)
 
-	r.HandleFunc("/gcd/{a}/{b}", gcdHandler).
+	r.Handle("/gcd/{a}/{b}", promMiddler.Instrument(gcdHandler)).
 		Methods("GET").
 		Name("gcd-compute")
-	r.HandleFunc("/fact/{a}", factHandler).
+	r.Handle("/fact/{a}", promMiddler.Instrument(factHandler)).
 		Methods("GET").
 		Name("fact-compute")
-	r.HandleFunc("/fib/{a}", fibHandler).
+	r.Handle("/fib/{a}", promMiddler.Instrument(fibHandler)).
 		Methods("GET").
 		Name("fib-compute")
+
 	r.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Header().Set("Content-Type", "application/json")
@@ -67,6 +71,9 @@ func main() {
 	}).
 		Methods("GET").
 		Name("ping")
+	r.Handle("/metrics", promhttp.Handler()).
+		Methods("GET").
+		Name("metrics")
 
 	host := fmt.Sprintf(":%d", port)
 	log.Printf("Starting FE server %s\n", host)

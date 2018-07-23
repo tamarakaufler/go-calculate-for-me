@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: fe
+  labels:
+   calc-metrics: fe
+spec:
+  jobLabel: calc-metrics
+  selector:
+    matchLabels:
+      calc-metrics: fe
+  namespaceSelector:
+    matchNames:
+    - default
+  endpoints:
+  - port: fe-service
+    interval: 20s
