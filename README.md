@@ -24,7 +24,7 @@ The application runs as a suite of gRPC based microservices doing the calculatio
 - Golang
 - microservices
 - protocol buffers
-- gRpc
+- gRPC
 - gorilla
 - Docker
 - Kubernetes
@@ -35,7 +35,7 @@ All code is stored and organised within a monorepo. Each service lives in its ow
 
 Makefile is used for ease of development and running.
 
-The application is deployed in a Kubernetes cluster.	
+The application is deployed in a Kubernetes cluster, in a calculations namespace.	
 
 ## Protocol buffers
 Autogenerate grpc code by running the following commands in the root derectory:
@@ -69,7 +69,7 @@ kubectl apply -f deployment/
 
 Then access the FE service on:
 
-  minikube service fe-service --url
+  minikube service fe-service -n calculations --url
 
 eg,
 
