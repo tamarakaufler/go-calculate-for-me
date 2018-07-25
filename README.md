@@ -1,5 +1,5 @@
 # go-calculate-for-me
-Running interdependent gRPC based microservices in Kubernetes
+Running a suite of gRPC based microservices in Kubernetes
 
 Application consists of an API service (fe-service) and a collection of microservices, implementing a particular calculation:
 ```
@@ -26,9 +26,10 @@ Application consists of an API service (fe-service) and a collection of microser
 - gorilla
 - Docker
 - Kubernetes
+- Prometheus
 - Makefile
 
-All code is stored and organised within a monorepo. Each service lives in its own directory. All protobuf descriptions share one directory (pb).The frontend to the calculation services (fe-service) has (gorilla) handlers and (gRPC) clients stored in their respective subdirectories (handler, client). Kubernetes deployment yamls are housed together in the deployment dir.
+All code is stored and organised within a monorepo. Each service lives in its own directory. All protobuf descriptions share one directory (pb).The frontend to the calculation services (fe-service) has (gorilla) handlers and (gRPC) clients stored in their respective subdirectories (handler, client). Kubernetes deployment yamls are stored in the deployment dir.
 
 Makefile is used for ease of development and running.
 
@@ -49,10 +50,8 @@ a) Manually
 
 b) make protoc
 
-  ## Deployment
-
-  ### Locally using Docker containers
-
+## Deployment
+### Locally using Docker containers
   GCD, factorial, fibonacci and FE services must all listen on different ports. One possible setup:
 
     make dev-all
@@ -61,8 +60,7 @@ b) make protoc
 
   where the FE service is running on default port 3000 in the container but is exposed on port 8888 on the host. GCD, Factorial and Fibonacci services run and are exposed on port 4000, 5000 and 6000 respectively.
 
-  ### In Kubernetes
-
+### In Kubernetes
 kubectl apply -f deployment/
 
 Then access the FE service on:
@@ -81,7 +79,6 @@ eg,
 
 
 ## Monitoring
-
 The fe service is instrumented for monitoring with Prometheus. The scraping
 path is the default /metrics. Intrumentation middleware provides two custom
 metrics:
@@ -96,8 +93,7 @@ On Ubuntu:
 
   sudo apt-get install apache2-utils
 
-#### Create some traffic :)
-
+#### Create some sizeable traffic
 Running against FE service running in Kubernetes cluster. Your IP and port may differ.
 
 ab -t 10 -n 10 http://192.168.99.100:30831/fib/5
