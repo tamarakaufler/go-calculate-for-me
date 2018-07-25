@@ -11,7 +11,7 @@ spec:
       calc-metrics: fe
   namespaceSelector:
     matchNames:
-    - default
+    - calculations
   endpoints:
   - port: fe-service
     interval: 20s
