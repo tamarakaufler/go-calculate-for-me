@@ -1,7 +1,8 @@
 # go-calculate-for-me
-Running a suite of gRPC based microservices in Kubernetes
+A SAAS for calculating Greatest common denominator/actorial/Fibonacci methods
 
-Application consists of an API service (fe-service) and a collection of microservices, implementing a particular calculation:
+The application runs as a suite of gRPC based microservices doing the calculations with a RESTful API service providing access to the functionality:
+
 ```
                          fe-service
           (REST api to gRPC calculation microservices)
@@ -16,7 +17,8 @@ Application consists of an API service (fe-service) and a collection of microser
   (Greatest common denominator) |       (Fibonacci)
                                 |
                       fact-service
-                       (Factorial)
+                       (Factorial)	       
+		       
 ```
 #### Technology stack and tools
 - Golang
@@ -32,6 +34,8 @@ Application consists of an API service (fe-service) and a collection of microser
 All code is stored and organised within a monorepo. Each service lives in its own directory. All protobuf descriptions share one directory (pb).The frontend to the calculation services (fe-service) has (gorilla) handlers and (gRPC) clients stored in their respective subdirectories (handler, client). Kubernetes deployment yamls are stored in the deployment dir.
 
 Makefile is used for ease of development and running.
+
+The application is deployed in a Kubernetes cluster.	
 
 ## Protocol buffers
 Autogenerate grpc code by running the following commands in the root derectory:
