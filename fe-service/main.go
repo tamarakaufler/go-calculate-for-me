@@ -10,7 +10,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/tamarakaufler/go-calculate-for-me/fe-service/client"
 	"github.com/tamarakaufler/go-calculate-for-me/fe-service/handler"
-	"github.com/tamarakaufler/go-calculate-for-me/instrumentation"
+	"github.com/tamarakaufler/go-calculate-for-me/instrumentation/monitoring"
 	"google.golang.org/grpc"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -31,7 +31,7 @@ func main() {
 	flag.Parse()
 	r := mux.NewRouter()
 
-	promMiddler := instrumentation.NewInstrMiddler("fe")
+	promMiddler := monitoring.NewMonitMiddler("fe")
 
 	gcdConf := client.Config{
 		Service: "gcd-service",
