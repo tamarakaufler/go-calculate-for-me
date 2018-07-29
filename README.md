@@ -1,7 +1,8 @@
 # go-calculate-for-me
-Running interdependent gRPC based microservices in Kubernetes
+A SAAS for calculating Greatest common denominator/actorial/Fibonacci methods
 
-Application consists of an API service (fe-service) and a collection of microservices, implementing a particular calculation:
+The application runs as a suite of gRPC based microservices doing the calculations with a RESTful API service providing access to the functionality:
+
 ```
                          fe-service
           (REST api to gRPC calculation microservices)
@@ -16,21 +17,25 @@ Application consists of an API service (fe-service) and a collection of microser
   (Greatest common denominator) |       (Fibonacci)
                                 |
                       fact-service
-                       (Factorial)
+                       (Factorial)	       
+		       
 ```
 #### Technology stack and tools
 - Golang
 - microservices
 - protocol buffers
-- gRpc
+- gRPC
 - gorilla
 - Docker
 - Kubernetes
+- Prometheus
 - Makefile
 
-All code is stored and organised within a monorepo. Each service lives in its own directory. All protobuf descriptions share one directory (pb).The frontend to the calculation services (fe-service) has (gorilla) handlers and (gRPC) clients stored in their respective subdirectories (handler, client). Kubernetes deployment yamls are housed together in the deployment dir.
+All code is stored and organised within a monorepo. Each service lives in its own directory. All protobuf descriptions share one directory (pb).The frontend to the calculation services (fe-service) has (gorilla) handlers and (gRPC) clients stored in their respective subdirectories (handler, client). Kubernetes deployment yamls are stored in the deployment dir.
 
 Makefile is used for ease of development and running.
+
+The application is deployed in a Kubernetes cluster, in a calculations namespace.	
 
 ## Protocol buffers
 Autogenerate grpc code by running the following commands in the root derectory:
@@ -49,10 +54,8 @@ a) Manually
 
 b) make protoc
 
-  ## Deployment
-
-  ### Locally using Docker containers
-
+## Deployment
+### Locally using Docker containers
   GCD, factorial, fibonacci and FE services must all listen on different ports. One possible setup:
 
     make dev-all
@@ -61,13 +64,12 @@ b) make protoc
 
   where the FE service is running on default port 3000 in the container but is exposed on port 8888 on the host. GCD, Factorial and Fibonacci services run and are exposed on port 4000, 5000 and 6000 respectively.
 
-  ### In Kubernetes
-
+### In Kubernetes
 kubectl apply -f deployment/
 
 Then access the FE service on:
 
-  minikube service fe-service --url
+  minikube service fe-service -n calculations --url
 
 eg,
 
@@ -81,7 +83,6 @@ eg,
 
 
 ## Monitoring
-
 The fe service is instrumented for monitoring with Prometheus. The scraping
 path is the default /metrics. Intrumentation middleware provides two custom
 metrics:
@@ -96,16 +97,21 @@ On Ubuntu:
 
   sudo apt-get install apache2-utils
 
-#### Create some traffic :)
-
+#### Create some sizeable traffic
 Running against FE service running in Kubernetes cluster. Your IP and port may differ.
 
 ab -t 10 -n 10 http://192.168.99.100:30831/fib/5
+
 ab -t 10 -n 20 http://192.168.99.100:30831/fib/10
+
 ab -t 10 -n 30 http://192.168.99.100:30831/fib/100
+
 ab -t 10 -n 50 http://192.168.99.100:30831/fact/5
+
 ab -t 10 -n 60 http://192.168.99.100:30831/fact/10
+
 ab -t 10 -n 70 http://192.168.99.100:30831/fact/100
+
 ab -t 10 -n 100 http://192.168.99.100:30831/gcd/55/555
 
 The above commands can be issued by running:
