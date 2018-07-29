@@ -38,7 +38,13 @@ https://github.com/zbindenren/negroni-prometheus/blob/master/middleware.go
 
 https://itnext.io/kubernetes-monitoring-with-prometheus-in-15-minutes-8e54d1de2e13
 
+https://rsmitty.github.io/Prometheus-Exporters/
+
 https://alex.dzyoba.com/blog/go-prometheus-service/
+
+https://blog.alexellis.io/prometheus-monitoring/
+
+https://sysdig.com/blog/prometheus-metrics/
 
 https://github.com/prometheus/prometheus/issues/4052
 
