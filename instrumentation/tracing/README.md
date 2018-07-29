@@ -43,5 +43,16 @@ github.com/openzipkin/zipkin-go/model
 ### Notes
 Only the library was implemented. Currently not used within the microservices.
 
-## Reading/credits
+## Credits
 https://medium.com/devthoughts/instrumenting-a-go-application-with-zipkin-b79cc858ac3e
+
+## Useful links
+https://github.com/alextanhongpin/go-jaeger-trace/blob/master/main.go
+
+https://github.com/helm/charts/tree/master/incubator/jaeger
+
+https://github.com/Financial-Times/zipkin-helm
+
+https://github.com/fabric8io/kubernetes-zipkin#minikube
+
+https://github.com/openzipkin/zipkin-go/blob/master/example_httpserver_test.go
