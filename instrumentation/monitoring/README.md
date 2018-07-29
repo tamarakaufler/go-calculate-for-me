@@ -43,3 +43,5 @@ https://alex.dzyoba.com/blog/go-prometheus-service/
 https://github.com/prometheus/prometheus/issues/4052
 
 http://www.ru-rocker.com/2017/04/02/micro-services-using-go-kit-monitoring-services
+
+https://coreos.com/operators/prometheus/docs/latest/user-guides/running-exporters.html
