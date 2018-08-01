@@ -120,3 +120,6 @@ dev-all: dev-all-services
 run-all-docker: run-gcd-service run-fact-service run-fib-service run-api-service
 
 run-all-k8s: dev-all k8s
+
+rmapicontainer:
+	docker ps | grep "api-service" | awk '{print $1}' | xargs docker rm -f
