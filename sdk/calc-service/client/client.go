@@ -21,6 +21,7 @@ type Output struct {
 	Result uint64 `json:"result"`
 }
 
+// NewClient creates a client for access to the calculate service
 func NewClient(u *url.URL, ua string, l *log.Logger) *Client {
 	return &Client{
 		BaseURL:    u,
@@ -30,6 +31,7 @@ func NewClient(u *url.URL, ua string, l *log.Logger) *Client {
 	}
 }
 
+// Fibonacci makes a request to api-service for a fibonacci calculation
 func (c *Client) Fibonacci(ctx context.Context, n uint64) (*Output, error) {
 	u := c.prepareServiceURL("/fib", fmt.Sprintf("%d", n))
 
@@ -42,6 +44,7 @@ func (c *Client) Fibonacci(ctx context.Context, n uint64) (*Output, error) {
 	return output, nil
 }
 
+// Factorial makes a request to api-service for a factorial calculation
 func (c *Client) Factorial(ctx context.Context, n uint64) (*Output, error) {
 	u := c.prepareServiceURL("/fact", fmt.Sprintf("%d", n))
 
@@ -54,6 +57,7 @@ func (c *Client) Factorial(ctx context.Context, n uint64) (*Output, error) {
 	return output, nil
 }
 
+// GreatestCommonDenominator makes a request to api-service for a gcd calculation
 func (c *Client) GreatestCommonDenominator(ctx context.Context, n, m uint64) (*Output, error) {
 	args := fmt.Sprintf("/%d/%d", n, m)
 	u := c.prepareServiceURL("/gcd", args)
@@ -67,7 +71,7 @@ func (c *Client) GreatestCommonDenominator(ctx context.Context, n, m uint64) (*O
 	return output, nil
 }
 
-// Helper functions and methods
+// Helper functions and methods --------------------------------
 
 func (c *Client) prepareServiceURL(path, args string) *url.URL {
 	ur := &url.URL{

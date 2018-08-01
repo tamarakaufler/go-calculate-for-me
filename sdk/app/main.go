@@ -1,3 +1,4 @@
+// An example how to use the client SDK for the calculate service
 package main
 
 import (
