@@ -4,7 +4,7 @@ A SAAS for calculating Greatest common denominator/actorial/Fibonacci methods
 The application runs as a suite of gRPC based microservices doing the calculations with a RESTful API service providing access to the functionality:
 
 ```
-                         fe-service
+                         api-service
           (REST api to gRPC calculation microservices)
                               |
                               |
@@ -31,7 +31,7 @@ The application runs as a suite of gRPC based microservices doing the calculatio
 - Prometheus
 - Makefile
 
-All code is stored and organised within a monorepo. Each service lives in its own directory. All protobuf descriptions share one directory (pb).The frontend to the calculation services (fe-service) has (gorilla) handlers and (gRPC) clients stored in their respective subdirectories (handler, client). Kubernetes deployment yamls are stored in the deployment dir.
+All code is stored and organised within a monorepo. Each service lives in its own directory. All protobuf descriptions share one directory (pb).The frontend to the calculation services (api-service) has (gorilla) handlers and (gRPC) clients stored in their respective subdirectories (handler, client). Kubernetes deployment yamls are stored in the deployment dir.
 
 Makefile is used for ease of development and running.
 
@@ -56,20 +56,20 @@ b) make protoc
 
 ## Deployment
 ### Locally using Docker containers
-  GCD, factorial, fibonacci and FE services must all listen on different ports. One possible setup:
+  GCD, factorial, fibonacci and API services must all listen on different ports. One possible setup:
 
     make dev-all
     
-    GCD_PORT=4000 FACT_PORT=5000 FIB_PORT=6000 FE_PORT=8888 make run-all
+    GCD_PORT=4000 FACT_PORT=5000 FIB_PORT=6000 API_PORT=8888 make run-all
 
-  where the FE service is running on default port 3000 in the container but is exposed on port 8888 on the host. GCD, Factorial and Fibonacci services run and are exposed on port 4000, 5000 and 6000 respectively.
+  where the API service is running on default port 3000 in the container but is exposed on port 8888 on the host. GCD, Factorial and Fibonacci services run and are exposed on port 4000, 5000 and 6000 respectively.
 
 ### In Kubernetes
 kubectl apply -f deployment/
 
-Then access the FE service on:
+Then access the API service on:
 
-  minikube service fe-service -n calculations --url
+  minikube service api-service -n calculations --url
 
 eg,
 
@@ -83,7 +83,7 @@ eg,
 
 
 ## Monitoring
-The fe service is instrumented for monitoring with Prometheus. The scraping
+The api service is instrumented for monitoring with Prometheus. The scraping
 path is the default /metrics. Intrumentation middleware provides two custom
 metrics:
   - requests_total
@@ -98,7 +98,7 @@ On Ubuntu:
   sudo apt-get install apache2-utils
 
 #### Create some sizeable traffic
-Running against FE service running in Kubernetes cluster. Your IP and port may differ.
+Running against API service running in Kubernetes cluster. Your IP and port may differ.
 
 ab -t 10 -n 10 http://192.168.99.100:30831/fib/5
 

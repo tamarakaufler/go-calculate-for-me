@@ -8,14 +8,14 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	"github.com/tamarakaufler/go-calculate-for-me/fe-service/client"
-	fibProto "github.com/tamarakaufler/go-calculate-for-me/pb/fib/v1"
+	"github.com/tamarakaufler/go-calculate-for-me/api-service/client"
+	factProto "github.com/tamarakaufler/go-calculate-for-me/pb/fact/v1"
 )
 
-func FibHandler(conf client.Config) http.HandlerFunc {
+func FactHandler(conf client.Config) http.HandlerFunc {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("Request for fibonacci calculation [%s]", r.RequestURI)
+		log.Printf("Request for factorial calculation [%s]", r.RequestURI)
 
 		w.Header().Set("Content-Type", "application/json")
 
@@ -26,21 +26,23 @@ func FibHandler(conf client.Config) http.HandlerFunc {
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			w.Header().Set("content", "")
-			w.Header().Set("error", "bad [a] value")
+			w.Header().Set("error", "bad request ([a] value)")
 			return
 		}
 
-		// Call Fib service -----------------------------
-		fibClient, err := client.FibService(conf)
+		// Call Fact service -----------------------------
+		factClient, err := client.FactService(conf)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
+			w.Header().Set("error", http.StatusText(http.StatusInternalServerError))
 			return
 		}
-		fibReq := &fibProto.FibRequest{A: a}
-		if fibRes, err := fibClient.Compute(r.Context(), fibReq); err == nil {
+
+		factReq := &factProto.FactRequest{A: a}
+		if factRes, err := factClient.Compute(r.Context(), factReq); err == nil {
 			w.WriteHeader(http.StatusOK)
 
-			io.WriteString(w, fmt.Sprintf(`{"result": "%d"}`, fibRes.GetResult()))
+			io.WriteString(w, fmt.Sprintf(`{"result": "%d"}`, factRes.GetResult()))
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Header().Set("error", http.StatusText(http.StatusInternalServerError))

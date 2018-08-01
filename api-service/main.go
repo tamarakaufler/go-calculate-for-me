@@ -8,8 +8,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/tamarakaufler/go-calculate-for-me/fe-service/client"
-	"github.com/tamarakaufler/go-calculate-for-me/fe-service/handler"
+	"github.com/tamarakaufler/go-calculate-for-me/api-service/client"
+	"github.com/tamarakaufler/go-calculate-for-me/api-service/handler"
 	"github.com/tamarakaufler/go-calculate-for-me/instrumentation/monitoring"
 	"google.golang.org/grpc"
 
@@ -21,7 +21,7 @@ var (
 )
 
 func init() {
-	flag.IntVar(&port, "port", 3000, "FE port")
+	flag.IntVar(&port, "port", 3000, "API port")
 	flag.IntVar(&gcdPort, "gcd-port", 3000, "GCD service port")
 	flag.IntVar(&factPort, "fact-port", 3000, "Factorial service port")
 	flag.IntVar(&fibPort, "fib-port", 3000, "Fibonacci service port")
@@ -76,6 +76,6 @@ func main() {
 		Name("metrics")
 
 	host := fmt.Sprintf(":%d", port)
-	log.Printf("Starting FE server %s\n", host)
+	log.Printf("Starting API server %s\n", host)
 	log.Fatal(http.ListenAndServe(host, r))
 }

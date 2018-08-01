@@ -8,7 +8,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	"github.com/tamarakaufler/go-calculate-for-me/fe-service/client"
+	"github.com/tamarakaufler/go-calculate-for-me/api-service/client"
 	gcdProto "github.com/tamarakaufler/go-calculate-for-me/pb/gcd/v1"
 )
 

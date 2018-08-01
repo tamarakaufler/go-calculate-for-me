@@ -1,11 +1,11 @@
-FE_IMAGE_TAG=v1alpha1
+API_IMAGE_TAG=v1alpha1
 GCD_IMAGE_TAG=v1alpha1
 FACT_IMAGE_TAG=v1alpha1
 FIB_IMAGE_TAG=v1alpha1
-FE_PORT?=3000
-GCD_PORT?=3000
-FACT_PORT?=3000
-FIB_PORT?=3000
+GCD_PORT?=3001
+FACT_PORT?=3002
+FIB_PORT?=3003
+API_PORT?=3000
 
 QUAY_PASS?=biggestsecret
 
@@ -38,7 +38,7 @@ run-gcd-service:
 	--network=calc-net-bridge \
 	--rm \
 	-d \
-	-p $(GCD_PORT):$(GCD_PORT) \
+	-p $(GCD_PORT):3000 \
 	quay.io/tamarakaufler/gcd-service:$(GCD_IMAGE_TAG) \
 	-port=$(GCD_PORT)
 
@@ -58,7 +58,7 @@ run-fact-service:
 	--network=calc-net-bridge \
 	--rm \
 	-d \
-	-p $(FACT_PORT):$(FACT_PORT) \
+	-p $(FACT_PORT):3000 \
 	quay.io/tamarakaufler/factorial-service:$(FACT_IMAGE_TAG) \
 	-port=$(FACT_PORT)
 
@@ -79,28 +79,28 @@ run-fib-service:
 	--network=calc-net-bridge \
 	--rm \
 	-d \
-	-p $(FIB_PORT):$(FIB_PORT) \
+	-p $(FIB_PORT):3000 \
 	quay.io/tamarakaufler/fibonacci-service:$(FIB_IMAGE_TAG) \
 	-port=$(FIB_PORT)
 
 
-dev-fe-service: protoc
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o fe-service/fe-service -a -installsuffix cgo fe-service/main.go
-	docker build -f fe-service/Dockerfile -t quay.io/tamarakaufler/fe-calculations:$(FE_IMAGE_TAG) .
+dev-api-service: protoc
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o api-service/api-service -a -installsuffix cgo api-service/main.go
+	docker build -f api-service/Dockerfile -t quay.io/tamarakaufler/api-calculations:$(API_IMAGE_TAG) .
 
-build-fe-service: protoc
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o fe-service/fe-service -a -installsuffix cgo fe-service/main.go
-	docker build -f fe-service/Dockerfile -t quay.io/tamarakaufler/fe-calculations:$(FE_IMAGE_TAG) .
+build-api-service: protoc
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o api-service/api-service -a -installsuffix cgo api-service/main.go
+	docker build -f api-service/Dockerfile -t quay.io/tamarakaufler/api-calculations:$(API_IMAGE_TAG) .
 	docker login quay.io -u tamarakaufler -p $(QUAY_PASS)
-	docker push quay.io/tamarakaufler/fe-calculations:$(FE_IMAGE_TAG)
+	docker push quay.io/tamarakaufler/api-calculations:$(API_IMAGE_TAG)
 
-run-fe-service:
+run-api-service:
 	docker run \
-	--name=fe-service \
+	--name=api-service \
 	--network=calc-net-bridge \
 	--rm \
-	-p $(FE_PORT):3000 \
-	quay.io/tamarakaufler/fe-calculations:$(FE_IMAGE_TAG) \
+	-p $(API_PORT):3000 \
+	quay.io/tamarakaufler/api-calculations:$(API_IMAGE_TAG) \
 	--gcd-port=$(GCD_PORT) --fact-port=$(FACT_PORT) --fib-port=$(FIB_PORT)
 
 
@@ -114,9 +114,9 @@ dev-all-services:  protoc
 
 
 dev-all: dev-all-services 
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o fe-service/fe-service -a -installsuffix cgo fe-service/main.go
-	docker build -f fe-service/Dockerfile -t quay.io/tamarakaufler/fe-calculations:$(FE_IMAGE_TAG) .
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o api-service/api-service -a -installsuffix cgo api-service/main.go
+	docker build -f api-service/Dockerfile -t quay.io/tamarakaufler/api-calculations:$(API_IMAGE_TAG) .
 
-run-all-docker: run-gcd-service run-fact-service run-fib-service run-fe-service
+run-all-docker: run-gcd-service run-fact-service run-fib-service run-api-service
 
 run-all-k8s: dev-all k8s

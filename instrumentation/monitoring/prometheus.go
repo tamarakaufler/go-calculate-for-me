@@ -23,7 +23,7 @@ type Middler struct {
 
 // NewInstrMiddler creates new instrumentation middleware.
 // name input refers to the microservice that is instrumented. In this case it is
-// the fe-service, but the instrumentation code can be extracted
+// the api-service, but the instrumentation code can be extracted
 // as an independent package for use with
 func NewMonitMiddler(name string, buckets ...float64) *Middler {
 	var m Middler

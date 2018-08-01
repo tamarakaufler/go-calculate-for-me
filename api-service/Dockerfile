@@ -3,5 +3,5 @@ RUN apk add --no-cache openssh ca-certificates
 
 RUN mkdir /app
 WORKDIR /app
-COPY fe-service /app
-ENTRYPOINT ["./fe-service"]
+COPY api-service /app
+ENTRYPOINT ["./api-service"]

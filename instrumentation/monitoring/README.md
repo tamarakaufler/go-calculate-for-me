@@ -1,7 +1,7 @@
 # Monitoring
 
 Prometheus monitoring and alerting system is used to provide useful insight into the
-performance and possible issues of the fe service API.
+performance and possible issues of the api service API.
 
 ## Prometheus installation
 
@@ -25,7 +25,7 @@ kubectl apply -g deployment/prometheus/
 
 ## Display
 
-/metrics endpoint of the fe service
+/metrics endpoint of the api service
 
 ### Prometheus dashboard
 kubectl port-forward -n monitoring prometheus-kube-prometheus-0 9090
