@@ -1,8 +1,7 @@
 package handler
 
 import (
-	"fmt"
-	"io"
+	"encoding/json"
 	"log"
 	"net/http"
 	"strconv"
@@ -11,6 +10,10 @@ import (
 	"github.com/tamarakaufler/go-calculate-for-me/api-service/client"
 	factProto "github.com/tamarakaufler/go-calculate-for-me/pb/fact/v1"
 )
+
+type FactOutput struct {
+	Result uint64 `json:"result"`
+}
 
 func FactHandler(conf client.Config) http.HandlerFunc {
 
@@ -42,7 +45,10 @@ func FactHandler(conf client.Config) http.HandlerFunc {
 		if factRes, err := factClient.Compute(r.Context(), factReq); err == nil {
 			w.WriteHeader(http.StatusOK)
 
-			io.WriteString(w, fmt.Sprintf(`{"result": "%d"}`, factRes.GetResult()))
+			output := &FactOutput{
+				Result: factRes.GetResult(),
+			}
+			json.NewEncoder(w).Encode(output)
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Header().Set("error", http.StatusText(http.StatusInternalServerError))

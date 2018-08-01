@@ -1,8 +1,7 @@
 package handler
 
 import (
-	"fmt"
-	"io"
+	"encoding/json"
 	"log"
 	"net/http"
 	"strconv"
@@ -11,6 +10,10 @@ import (
 	"github.com/tamarakaufler/go-calculate-for-me/api-service/client"
 	gcdProto "github.com/tamarakaufler/go-calculate-for-me/pb/gcd/v1"
 )
+
+type GCDOutput struct {
+	Result uint64 `json:"result"`
+}
 
 func GCDHandler(conf client.Config) http.HandlerFunc {
 
@@ -45,11 +48,14 @@ func GCDHandler(conf client.Config) http.HandlerFunc {
 			return
 		}
 
-		pbReq := &gcdProto.GCDRequest{A: a, B: b}
-		if pbRes, err := gcdClient.Compute(r.Context(), pbReq); err == nil {
+		gcdReq := &gcdProto.GCDRequest{A: a, B: b}
+		if gcdRes, err := gcdClient.Compute(r.Context(), gcdReq); err == nil {
 			w.WriteHeader(http.StatusOK)
 
-			io.WriteString(w, fmt.Sprintf(`{"result": "%d"}`, pbRes.GetResult()))
+			output := &GCDOutput{
+				Result: gcdRes.GetResult(),
+			}
+			json.NewEncoder(w).Encode(output)
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Header().Set("error", http.StatusText(http.StatusInternalServerError))

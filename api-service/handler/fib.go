@@ -1,8 +1,7 @@
 package handler
 
 import (
-	"fmt"
-	"io"
+	"encoding/json"
 	"log"
 	"net/http"
 	"strconv"
@@ -11,6 +10,10 @@ import (
 	"github.com/tamarakaufler/go-calculate-for-me/api-service/client"
 	fibProto "github.com/tamarakaufler/go-calculate-for-me/pb/fib/v1"
 )
+
+type FibOutput struct {
+	Result uint64 `json:"result"`
+}
 
 func FibHandler(conf client.Config) http.HandlerFunc {
 
@@ -40,7 +43,10 @@ func FibHandler(conf client.Config) http.HandlerFunc {
 		if fibRes, err := fibClient.Compute(r.Context(), fibReq); err == nil {
 			w.WriteHeader(http.StatusOK)
 
-			io.WriteString(w, fmt.Sprintf(`{"result": "%d"}`, fibRes.GetResult()))
+			output := &FibOutput{
+				Result: fibRes.GetResult(),
+			}
+			json.NewEncoder(w).Encode(output)
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Header().Set("error", http.StatusText(http.StatusInternalServerError))
