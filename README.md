@@ -1,5 +1,5 @@
 # go-calculate-for-me
-A SAAS for calculating Greatest common denominator/actorial/Fibonacci methods
+A SAAS for calculating Greatest common denominator/Factorial/Fibonacci methods
 
 The application runs as a suite of gRPC based microservices doing the calculations with a RESTful API service providing access to the functionality:
 
